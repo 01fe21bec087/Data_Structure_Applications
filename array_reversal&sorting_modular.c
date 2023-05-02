@@ -31,6 +31,7 @@ int read_n_nos_from_file(FILE* fptr,char readthisfile[],int arr[],int n)    //(f
         }
         return n;
     }
+    fclose(fptr);
 }
 
 void write_n_nos_to_file(FILE* fptr,char writethisfile[],int arr[],int n)       //(file_ptr,file_name,source_array,array_size)
