@@ -10,41 +10,41 @@ Constraint: maximum number of numbers written to file is defined in MAXRAND
 #include<stdio.h>
 #include<time.h>
 #define MAXRAND 1000
-struct node
+struct node             //Structure declaration
 {
     int data;
     struct node *next;
 };
-typedef struct node *NODE;
+typedef struct node *NODE;            //alias name for structure
 NODE head, newnode, temp, cur,next,prev;          //Global declaration
 NODE head=NULL;
 
-NODE getnode()
+NODE getnode()              //Creating a new node
 {
     newnode=(NODE)malloc(sizeof(struct node));
-    if(newnode==NULL)
+    if(newnode==NULL)           //Overflow condition    (maximum memory reached)
     {
         printf ("Memory not allocated for node! \n");
         exit(0);
     }
-    newnode->next=NULL;
+    newnode->next=NULL;     //assigning link of created node to NULL
     return newnode;
 }
 
-NODE insertend(int num)
+NODE insertend(int num)             //Insert newnode at the end of SLL
 {
-    newnode=getnode();
-    newnode->data=num;
-    if(head==NULL)
+    newnode=getnode();              //Creating newnode
+    newnode->data=num;              //assign data into node
+    if(head==NULL)                  //SLL is empty
     {
-        head=newnode;
+        head=newnode;               //newnnode is the first node
     }
-    else
-    {
+    else                            //SLL exists
+    {   
         temp=head;
-        while(temp->next!=NULL)
+        while(temp->next!=NULL)    //traverse till the end of SLL
             temp=temp->next;
-        temp->next=newnode;
+        temp->next=newnode;         //last node
     }
     //printf("Entered the element %d in a node\n",newnode->data);
     return(head);
@@ -52,14 +52,14 @@ NODE insertend(int num)
 
 void generate_random_nums(FILE *fptr,char file_name[])
 {
-    fptr=fopen(file_name,"w");
+    fptr=fopen(file_name,"w");          //open file in write mode
     int num;
-    if(fptr==NULL)
+    if(fptr==NULL)                  
         printf("'%s' File creation error!\n",file_name);
     else
     {
         printf("File created successfully\n");
-        for(int i=0;i<MAXRAND;i++)
+        for(int i=0;i<MAXRAND;i++)              //generating MAXRAND number of random numbers
         {
             num=rand();
             fprintf(fptr,"%d\n",num%200);
@@ -72,8 +72,8 @@ void generate_random_nums(FILE *fptr,char file_name[])
 int read_n_nos_from_file(FILE* fptr,char readthisfile[],int n)    //(file_pointer,file_name,size)
 {
     printf("Reading from file:\n");
-    fptr=fopen(readthisfile,"r");
-    if(fptr==NULL)
+    fptr=fopen(readthisfile,"r");                           //opening file in read mode
+    if(fptr==NULL)                                          
     {
         printf("%s File opening error!\n",readthisfile);
         return NULL;
@@ -85,7 +85,7 @@ int read_n_nos_from_file(FILE* fptr,char readthisfile[],int n)    //(file_pointe
         printf("Enter number of numbers to operate: ");
         scanf("%d",&n);
 
-        for(int i=0;i<n;i++)
+        for(int i=0;i<n;i++)                    //inserting n numbers from file into SLL
         {
             int buf;
             fscanf(fptr,"%d",&buf);
@@ -96,21 +96,20 @@ int read_n_nos_from_file(FILE* fptr,char readthisfile[],int n)    //(file_pointe
     }
 }
 
-NODE reverse_nodes(NODE head)
+NODE reverse_nodes(NODE head)           //reversing the links (and not the data)
 {
     printf("Reversing Linked list:\n");
     cur=head;
     prev=NULL;
-    NODE fwd=head;
-    while(cur!=NULL)
+    NODE fwd=head;              //this is the node next to cur
+    while(cur!=NULL)            //traverse throughout the LL
     {
         fwd=cur->next;
-        cur->next=prev;
+        cur->next=prev;         //assigning link of cur to prev
         prev=cur;
         cur=fwd;
     }
-    head=prev;
-    temp=head;
+    head=prev;          //new head points to the last node         
     return head;
 }
 
@@ -119,12 +118,12 @@ NODE bubble_sort(NODE head)
     printf("\nBubble sorting Linked list: \n");
     cur=head;
     prev=head;
-    while(cur->next!=NULL)
+    while(cur->next!=NULL)                  //traversing throughout the SLL
     {
-        while(prev->next!=NULL)
+        while(prev->next!=NULL)             //traversing throughout the SLL (from start to end)
         {
-            if(prev->data > prev->next->data){
-                int tempdata=prev->data;
+            if(prev->data > prev->next->data){      //if 1st element is greater than 2nd ==> Ascending order condition
+                int tempdata=prev->data;            //swap
                 prev->data = prev->next->data;
                 prev->next->data = tempdata;
             }
@@ -153,25 +152,26 @@ NODE bubble_sort(NODE head)
 }
 */
 
-void display_SLL(NODE start)
-{
-    if(start==NULL)
+void display_SLL(NODE head)
+{       
+    if(head==NULL)                 //empty SLL
     {
         printf ("No data available in Linked list!");
+        return;
     }
-    temp=start;
+    temp=head;
     printf("Displaying numbers from nodes:\n");
-    do
+    do                              //traversing throughout the SLL (since it is not empty)
     {
         printf ("%d\t",temp->data);
         temp=temp->next;
-    }while(temp->next!=NULL);
-    printf ("%d ",temp->data);
+    }while(temp!=NULL);
+    //printf ("%d ",temp->data);
 }
 
 void main()
 {
-    clock_t start_time,end_time;
+    clock_t start_time,end_time;        //declaring timimgs
     double duration=0.0;
     FILE *fptr;
     int n;
